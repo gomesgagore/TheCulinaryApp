@@ -1,0 +1,83 @@
+{
+  "users": [
+    {
+      "username": "carlosbobo",
+      "password": "123bobo",
+      "name": "Carlos Vinicius",
+      "profile_pic": "https://scontent.fsjk1-1.fna.fbcdn.net/v/t1.0-1/p160x160/165935_474730965873107_822477492_n.jpg?oh=0f6646a8e6a7f4495b53fd403c5a916d&oe=58A46CDE",
+      "friends": [
+        "lucas",
+        "otaviano",
+        "pereira"
+      ],
+      "recipes": [
+        "applecake",
+        "applejuice",
+        "appletart"
+      ]
+    },
+    {
+      "username": "lucas",
+      "password": "123bobo",
+      "name": "Lucas Otaviano Pereira",
+      "profile_pic": null,
+      "friends": [
+        "carlosbobo",
+        "otaviano",
+        "pereira"
+      ],
+      "recipes": [
+        "applecake",
+        "appletart"
+      ]
+    },
+    {
+      "username": "otaviano",
+      "password": "123bobo",
+      "profile_pic": null,
+      "name": "Lucas Otaviano Pereira",
+      "friends": [
+        "lucas",
+        "carlosbobo",
+        "pereira"
+      ],
+      "recipes": [
+        "appletart"
+      ]
+    },
+    {
+      "username": "pereira",
+      "password": "123bobo",
+      "name": "Lucas Otaviano Pereira",
+      "profile_pic": null,
+      "friends": [
+        "lucas",
+        "otaviano",
+        "carlosbobo"
+      ],
+      "recipes": [
+        "appletart"
+      ]
+    }
+  ],
+  "recipes": [
+    {
+      "recipeid": "applecake",
+      "recipeName": "Apple Cake",
+      "picture": "food1",
+      "description": "Take two apples and put in a tray. Ingredients: Apples, Tray."
+    },
+    {
+      "recipeid": "applejuice",
+      "recipeName": "Apple Juice",
+      "picture": "food2",
+      "description": "Take two apples and put in a jar. Ingredients: Apples, Jar."
+    },
+    {
+      "recipeid": "appletart",
+      "recipeName": "Apple Tart",
+      "picture": "food3",
+      "description": "Take two apples and put in a tart shell. Ingredients: Apples, Tart shell."
+    }
+  ]
+}

@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="@drawable/kitchback"
+    android:backgroundTint="@color/back_Whiteness"
+    android:backgroundTintMode="src_over"
+    android:focusable="true"
+    android:focusableInTouchMode="true">
+
+        <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:tools="http://schemas.android.com/tools"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            tools:context=".LoginActivity"
+            android:padding="0dp"
+            android:nestedScrollingEnabled="false">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:text="@string/login_string"
+                android:id="@+id/login_textview"
+                android:allowUndo="false"
+                android:textSize="25sp"
+                android:layout_marginTop="54dp"
+                android:layout_alignParentTop="true"
+                android:layout_centerHorizontal="true" />
+
+            <EditText
+                android:layout_width="300dp"
+                android:layout_height="40dp"
+                android:id="@+id/login_form"
+                android:layout_below="@+id/login_textview"
+                android:layout_centerHorizontal="true"
+                android:onClick="checkInputs" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:id="@+id/password_textview"
+                android:textSize="25sp"
+                android:layout_below="@+id/login_form"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="30dp"
+                android:text="@string/password_string" />
+
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/login_string"
+                android:id="@+id/button_login"
+                android:layout_marginTop="20dp"
+                android:onClick="checkInputs"
+                android:layout_below="@+id/password_login"
+                android:layout_alignRight="@+id/login_form" />
+
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/register_string"
+                android:id="@+id/register_button_login"
+                android:layout_marginTop="20dp"
+                android:onClick="goToRegister"
+                android:layout_below="@+id/password_login"
+                android:layout_centerHorizontal="true"
+                android:layout_alignStart="@+id/login_form" />
+
+            <EditText
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:inputType="textPassword"
+                android:ems="10"
+                android:id="@+id/password_login"
+                android:layout_below="@+id/password_textview"
+                android:layout_centerHorizontal="true"
+                android:layout_alignLeft="@+id/login_form"
+                android:layout_alignRight="@+id/login_form" />
+        </RelativeLayout>
+</LinearLayout>

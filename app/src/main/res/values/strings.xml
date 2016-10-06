@@ -1,0 +1,23 @@
+<resources>
+    <string name="app_name">The Culinary App</string>
+    <string name="login_string">Login</string>
+    <string name="password_string">Password</string>
+    <string name="register_string">Register</string>
+    <string name="newpassword_string">New Password</string>
+    <string name="cancel_string">Cancel</string>
+    <string name="accept_string">Accept</string>
+    <string name="friends">Friends</string>
+    <string name="level">Level</string>
+    <string name="name">Name</string>
+    <string name="recipes">Recipes</string>
+    <string name="profile_picture">Profile Picture</string>
+    <string name="add_this_recipe">Add this Recipe</string>
+    <string name="image">Image</string>
+    <string name="recipe_image">Recipe Image</string>
+    <string name="logout">Logout</string>
+    <string name="confirm_password">Confirm Password</string>
+    <string name="new_login">New Login</string>
+    <string name="profile_name">Profile Name</string>
+    <string name="wrong_login_toast">Wrong Login, try again.</string>
+
+</resources>

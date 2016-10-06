@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:backgroundTint="@color/back_Whiteness"
+    android:background="@drawable/kitchback"
+    android:backgroundTintMode="src_over">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_margin="10dp"
+        android:backgroundTintMode="src_over">
+
+        <ImageView
+            android:layout_width="110dp"
+            android:layout_height="110dp"
+            android:id="@+id/profile_image"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentStart="true"
+            android:src="@drawable/people1" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:text="@string/profile_name"
+            android:id="@+id/profile_text"
+            android:layout_alignParentTop="true"
+            android:layout_toEndOf="@+id/profile_image"
+            android:layout_marginLeft="20dp" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:text="Medium Text"
+            android:id="@+id/profile_desc"
+            android:layout_below="@+id/profile_text"
+            android:layout_alignStart="@+id/profile_text"
+            android:layout_marginTop="15dp"
+            android:lines="3" />
+
+        <GridView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/profile_list"
+            android:layout_below="@+id/friends_switch"
+            android:layout_alignParentStart="true"
+            android:layout_marginTop="10dp"
+            android:numColumns="2" />
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/friends"
+            android:id="@+id/friends_switch"
+            android:layout_below="@+id/profile_image"
+            android:layout_alignParentStart="true"
+            android:onClick="setFriendsList"
+            android:layout_marginTop="10dp" />
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/recipes"
+            android:id="@+id/recipes_switch"
+            android:layout_alignTop="@+id/friends_switch"
+            android:layout_alignParentEnd="true"
+            android:onClick="setRecipesList" />
+    </RelativeLayout>
+</LinearLayout>
