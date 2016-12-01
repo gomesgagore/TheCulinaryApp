@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "974565437828",
+    "firebase_url": "https://the-culinary-app.firebaseio.com",
+    "project_id": "the-culinary-app",
+    "storage_bucket": "the-culinary-app.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:974565437828:android:9065f901e7dd1a3d",
+        "android_client_info": {
+          "package_name": "com.carlos.theculinaryapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "974565437828-7t7cfel9v1f5d5ngomsskan4gp0uqo9c.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBnXW5QZEWWbyQjjX_PMxydgCbI-q3QkZw"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
