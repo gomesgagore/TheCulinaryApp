@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/nav_go_to_your_own_profile"
+            android:title="Go to your profile" />
+        <item
+            android:id="@+id/nav_search_for_person"
+            android:title="Search for a person" />
+        <item
+            android:id="@+id/nav_search_for_recipe"
+            android:title="Search for a recipe" />
+        <item
+            android:id="@+id/nav_search_for_ingredient"
+            android:title="Search for a ingredient" />
+        <item
+            android:id="@+id/nav_create_recipe"
+            android:title="Create a recipe" />
+        <item
+            android:id="@+id/nav_add_this_person_as_a_friend"
+            android:title="Add this person as a friend" />
+        <item
+            android:id="@+id/nav_logout"
+            android:title="Logout" />
+    </group>
+</menu>

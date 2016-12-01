@@ -1,43 +1,41 @@
 package com.carlos.theculinaryapp;
 
-import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
+import android.support.annotation.NonNull;
+import android.support.design.widget.NavigationView;
+import android.support.v4.view.GravityCompat;
+import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import org.json.JSONArray;
-import org.json.JSONObject;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
-public class LoginActivity extends AppCompatActivity {
-    private JSONArray usersAuthArray;
+public class LoginActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
     private String TAG = "LoginActivity";
     private GenericDAO dao = GenericDAO.getInstance();
-
-
+    private FirebaseAuth auth = dao.getFirebaseAuth();
+    private FirebaseUser user;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-        SharedPreferences sp1 = this.getSharedPreferences("AuthInfo", Context.MODE_PRIVATE);
-        String unm = sp1.getString("username", null);
-        String pass = sp1.getString("password", null);
-        if(unm != null && pass != null){
-            if(checkAuth(unm, pass)){
-                goToLoginActivity();
-            }
+        user = auth.getCurrentUser();
+        if(user != null){
+            goToProfileActivity();
         }
-
-    }
-
-    public void goToRegister(View view){
-        Intent k = new Intent(LoginActivity.this, ProfileActivity.class);
-        startActivity(k);
+        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view_login);
+        navigationView.setNavigationItemSelectedListener(this);
     }
 
     public void checkInputs(View view){
@@ -45,51 +43,45 @@ public class LoginActivity extends AppCompatActivity {
         EditText passIn = (EditText) findViewById(R.id.password_login);
         String unm = userIn.getText().toString();
         String pass = passIn.getText().toString();
-        if(checkAuth(unm, pass) == false) {
-            Toast.makeText(getApplicationContext(), getResources().getString(R.string.wrong_login_toast), Toast.LENGTH_SHORT).show();
-        }
-        else {
-            SharedPreferences sp1 = this.getSharedPreferences("AuthInfo", 0);
-            SharedPreferences.Editor ed = sp1.edit();
-            ed.putString("username", unm);
-            ed.putString("password", pass);
-            ed.commit();
-            goToLoginActivity();
-        }
-    }
-
-    public void getUsersDAO(){
-        if(dao != null){
-            usersAuthArray = dao.getAllUsers();
-        }
-    }
-
-    public boolean checkAuth(String unm, String pass){
-        getUsersDAO();
-        if(usersAuthArray!=null)
-            for (int i = 0; i < usersAuthArray.length(); i++) {
-            try {
-                JSONObject temp = usersAuthArray.getJSONObject(i);
-                if(temp.getString("username").equals(unm) && temp.getString("password").equals(pass)){
-                    UserInfo.setProfileView(this, dao.getUserInfo(unm));
-                    return true;
+        if(!unm.equals("") && !pass.equals("")){
+        unm.trim();
+        pass.trim();
+            auth.signInWithEmailAndPassword(unm, pass).addOnCompleteListener(LoginActivity.this, new OnCompleteListener<AuthResult>() {
+                @Override
+                public void onComplete(@NonNull Task<AuthResult> task) {
+                    if (task.isSuccessful()) {
+                        //TODO create database data;
+                        goToProfileActivity();
+                    } else {
+                        Toast.makeText(LoginActivity.this, "Login Fail " + task.getException(), Toast.LENGTH_LONG).show();
+                    }
                 }
-            } catch (Exception e) {
-                Log.e(TAG, e.getMessage());
-                return false;
-            }
+            });
         }
-        Log.d(TAG, "nothing found on Auth");
-        return false;
     }
 
-    private void goToLoginActivity(){
+    private void goToProfileActivity(){
         Intent k = new Intent(LoginActivity.this, ProfileActivity.class);
         k.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         k.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
         k.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+        user = auth.getCurrentUser();
+        if(user != null)k.putExtra("userUuid", user.getUid());
         startActivity(k);
         finish();
     }
 
+    @SuppressWarnings("StatementWithEmptyBody")
+    @Override
+    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+        int id = item.getItemId();
+
+        if (id == R.id.nav_register) {
+            startActivity(new Intent(getApplicationContext(), RegisterActivity.class));
+        }
+
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.activity_drawer_layout_login);
+        drawer.closeDrawer(GravityCompat.START);
+        return true;
+    }
 }

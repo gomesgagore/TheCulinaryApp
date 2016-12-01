@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v4.widget.DrawerLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".RecipeActivity"
+    android:backgroundTint="@color/back_Whiteness"
+    android:backgroundTintMode="src_over"
+    android:background="@drawable/kitchback"
+    android:id="@+id/activity_drawer_layout_recipe"
+    android:focusable="true"
+    android:focusableInTouchMode="true">
+
+    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        tools:context=".RecipeActivity"
+        android:padding="10dp"
+        android:nestedScrollingEnabled="false">
+
+    <ImageView
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:id="@+id/recipe_activity_picture"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentStart="true"
+        android:src="@drawable/food5"
+        android:contentDescription="@string/recipe_image" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="Large Text"
+        android:id="@+id/name_text"
+        android:layout_alignParentEnd="false"
+        android:layout_toRightOf="@+id/recipe_activity_picture"
+        android:layout_alignParentLeft="false"
+        android:layout_marginLeft="10dp" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:text="Small Text"
+        android:id="@+id/desc_text"
+        android:layout_below="@+id/recipe_activity_picture"
+        android:layout_alignParentStart="true"
+        android:layout_marginTop="20dp" />
+
+        <ListView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/ingredient_list"
+            android:layout_below="@+id/desc_text"
+            android:layout_alignParentStart="true"
+            android:layout_marginTop="10dp"
+            android:layout_centerHorizontal="true"
+            android:layout_alignParentBottom="false"
+            android:layout_alignParentLeft="false"
+            android:layout_alignParentTop="false"
+            android:layout_alignParentEnd="false" />
+
+    </RelativeLayout>
+
+    <android.support.design.widget.NavigationView
+        android:id="@+id/nav_view_recipe"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_gravity="start"
+        android:fitsSystemWindows="true"
+        app:headerLayout="@layout/nav_header_gaveta"
+        app:menu="@menu/gavetamenu_recipe" />
+
+</android.support.v4.widget.DrawerLayout>

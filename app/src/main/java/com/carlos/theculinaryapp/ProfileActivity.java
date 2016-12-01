@@ -1,122 +1,153 @@
 package com.carlos.theculinaryapp;
 
-import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.os.StrictMode;
+import android.support.annotation.NonNull;
+import android.support.design.widget.NavigationView;
+import android.support.v4.view.GravityCompat;
+import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.ListAdapter;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.Arrays;
+import java.util.ArrayList;
 
-public class ProfileActivity extends AppCompatActivity {
+public class ProfileActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
     private GridView customListView;
     private ListAdapter customListAdapterRecipes;
     private ListAdapter customListAdapterPeople;
-
-    private ProfileItem[] recipes = new ProfileItem[]{
-            new ProfileItem("food1", "food1"), new ProfileItem("food2", "food2"),
-            new ProfileItem("food3", "food3"), new ProfileItem("food4", "food4"),
-            new ProfileItem("food5", "food5"), new ProfileItem("food6", "food6")
-    };
-
-    private ProfileItem[] people = new ProfileItem[]{
-            new ProfileItem("Person 1", "people1"), new ProfileItem("Person 1", "people2"),
-            new ProfileItem("Person 1", "people3"), new ProfileItem("Person 1", "people4"),
-            new ProfileItem("Person 1", "people5"), new ProfileItem("Person 1", "people6")
-    };
+    private GenericDAO dao = GenericDAO.getInstance();
+    private FirebaseAuth auth = dao.getFirebaseAuth();
+    private FirebaseUser user = auth.getCurrentUser();
+    private String useruuid;
     private String TAG = "ProfileActivity";
+    private static TextView profileNameTextView;
+    private static ImageView profilePictureImageView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        if(user == null)doLogout();
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
 
-        //TODO
-        //if profile is user, show "go to your profile" button on menu.
+        Intent intent = getIntent();
+        useruuid = intent.getStringExtra("userUuid");
+        if(useruuid == null)useruuid = user.getUid();
+        dao.retriveProfileData(useruuid, this);
 
-        SharedPreferences sp1 = getSharedPreferences("ProfileView", 0);
-        String spProfileName = sp1.getString("userRealName" ,null);
-        String spProfilePic = sp1.getString("profilePicUrl" ,null);
-        ImageView profilePic = (ImageView) findViewById(R.id.profile_image);
-        TextView profileNameText = (TextView) findViewById(R.id.profile_text);
-        URL url = null;
-        if(spProfilePic != null)
+        profilePictureImageView = (ImageView) findViewById(R.id.profile_image);
+        profileNameTextView = (TextView) findViewById(R.id.profile_text);
+
+        customListView = (GridView) findViewById(R.id.profile_list);
+
+        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view_profile);
+        navigationView.setNavigationItemSelectedListener(this);
+
+    }
+
+    public void setFriendsListByView(View v){
+        customListView.setAdapter(customListAdapterPeople);
+        customListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                ProfileItem i = (ProfileItem)customListView.getItemAtPosition(position);
+                Intent k = new Intent(ProfileActivity.this, ProfileActivity.class);
+                k.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                k.putExtra("userUuid", i.getUseruuid());
+                startActivity(k);
+            }
+        });
+    }
+    public void setRecipesListByView(View v) {
+        customListView.setAdapter(customListAdapterRecipes);
+        customListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                RecipeItem i = (RecipeItem)customListView.getItemAtPosition(position);
+                Intent k = new Intent(ProfileActivity.this, RecipeActivity.class);
+                k.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                k.putExtra("recipeUuid", i.getRecipeUuid());
+                startActivity(k);
+            }
+        });
+    }
+
+    public void updateRecipeList(ArrayList<RecipeItem> profileItems){
+        RecipeItem[] items = new RecipeItem[profileItems.size()];
+        for (int i = 0; i < profileItems.size(); i++) {
+            items[i] = profileItems.get(i);
+        }
+        customListAdapterRecipes = new CustomAdapterRecipe(this, items);
+        customListView.setAdapter(customListAdapterRecipes);
+        customListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                RecipeItem i = (RecipeItem)customListView.getItemAtPosition(position);
+                Intent k = new Intent(ProfileActivity.this, RecipeActivity.class);
+                k.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                k.putExtra("recipeUuid", i.getRecipeUuid());
+                startActivity(k);
+            }
+        });
+    }
+
+    public void updateProfileList(ArrayList<ProfileItem> profileItems){
+        ProfileItem[] items = new ProfileItem[profileItems.size()];
+        for (int i = 0; i < profileItems.size(); i++) {
+            items[i] = profileItems.get(i);
+        }
+        customListAdapterPeople = new CustomAdapterProfile(this, items);
+        customListView.setAdapter(customListAdapterPeople);
+        customListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                ProfileItem i = (ProfileItem)customListView.getItemAtPosition(position);
+                Intent k = new Intent(ProfileActivity.this, ProfileActivity.class);
+                k.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                k.putExtra("userUuid", i.getUseruuid());
+                startActivity(k);
+            }
+        });
+    }
+
+    public static void setProfilePictureByURL(String picUrl){
+        StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+        StrictMode.setThreadPolicy(policy);
+        Bitmap bmp = null;
+        URL url;
+        if(picUrl != null)
             try {
-                url = new URL(spProfilePic);
-                Bitmap bmp = null;
+
+                url = new URL(picUrl);
                 try {
                     bmp = BitmapFactory.decodeStream(url.openConnection().getInputStream());
                 } catch (IOException e) {
-                    Log.e(TAG, e.getMessage());
+                    Log.e("Error", e.getMessage());
                 }
-                profilePic.setImageBitmap(bmp);
             } catch (MalformedURLException e) {
-                Log.e(TAG, e.getMessage());
+                Log.e("Error", e.getMessage());
             }
-        else profilePic.setImageResource(getResources().getIdentifier("people2", "drawable", getPackageName()));
-
-        if(spProfileName != null || !spProfileName.equals(""))profileNameText.setText(spProfileName);
-        else profileNameText.setText("No Name");
-
-        ProfileItem[] temp1 = Arrays.copyOf(recipes, recipes.length + 1);
-        temp1[temp1.length-1] = new ProfileItem("Add a recipe", "plus");
-        recipes = temp1;
-
-        ProfileItem[] temp2 = Arrays.copyOf(people, people.length + 1);
-        temp2[temp2.length-1] = new ProfileItem("Add a person", "plus");
-        people = temp2;
-
-        customListAdapterPeople = new CustomAdapterProfile(this, people);
-        customListAdapterRecipes = new CustomAdapterProfile(this, recipes);
-
-        customListView = (GridView) findViewById(R.id.profile_list);
-        customListView.setAdapter(customListAdapterRecipes);
-
-
-    }
-
-    public void setFriendsList(View v){
-        customListView.setAdapter(customListAdapterPeople);
-    }
-    public void setRecipesList(View v){
-        customListView.setAdapter(customListAdapterRecipes);
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.menu_login, menu);
-        return true;
-    }
-
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.logout:
-                doLogout();
-                return true;
-            default:
-                return super.onOptionsItemSelected(item);
-        }
+        if(bmp != null && profilePictureImageView != null)profilePictureImageView.setImageBitmap(bmp);
     }
 
     private void doLogout() {
-        SharedPreferences sp1 = this.getSharedPreferences("AuthInfo", Context.MODE_PRIVATE);
-        sp1.edit().clear().commit();
+        auth.signOut();
         Intent k = new Intent(ProfileActivity.this, LoginActivity.class);
         k.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         k.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
@@ -125,5 +156,47 @@ public class ProfileActivity extends AppCompatActivity {
         finish();
     }
 
+    public void setProfileName(String profileName) {
+        profileNameTextView.setText(profileName);
+    }
 
+    @Override
+    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+        int id = item.getItemId();
+
+        if (id == R.id.nav_register) {
+            doLogout();
+            startActivity(new Intent(getApplicationContext(), RegisterActivity.class));
+        }else if (id == R.id.nav_go_to_your_own_profile) {
+            if(useruuid != user.getUid()){
+                Intent k = new Intent(new Intent(getApplicationContext(), ProfileActivity.class));
+                k.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                k.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                k.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                k.putExtra("userUuid", user.getUid());
+                startActivity(k);
+            }else Toast.makeText(this, "You are in your profile already", Toast.LENGTH_LONG).show();
+        }else if (id == R.id.nav_search_for_person){
+            startActivity(new Intent(getApplicationContext(), SearchProfile.class));
+
+        }else if (id == R.id.nav_search_for_recipe){
+            startActivity(new Intent(getApplicationContext(), SearchRecipe.class));
+        }else if (id == R.id.nav_search_for_ingredient){
+
+        }else if (id == R.id.nav_create_recipe){
+
+        }else if (id == R.id.nav_add_this_person_as_a_friend){
+            if(!useruuid.equals(user.getUid())) {
+                dao.addAsFriend(user.getUid(), useruuid, this);
+            }
+            else Toast.makeText(this, "You can't be a friend of yourself", Toast.LENGTH_LONG).show();
+        }else if (id == R.id.nav_logout) {
+            doLogout();
+        }
+
+
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.activity_drawer_layout_profile);
+        drawer.closeDrawer(GravityCompat.START);
+        return true;
+    }
 }
